@@ -1,0 +1,26 @@
+# Blueprint Render : New > Blueprint > sélectionner ce dépôt.
+# Vérifier les noms de plans dans le tableau de bord Render (ils évoluent).
+databases:
+  - name: geocivil-db
+    databaseName: geocivil
+    user: geocivil
+    plan: basic-256mb
+services:
+  - type: web
+    name: geocivil-api
+    runtime: docker
+    # dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase: {name: geocivil-db, property: connectionString}
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ENVIRONMENT
+        value: production
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
